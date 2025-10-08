@@ -1,15 +1,24 @@
-from flask import Flask, request
+from flask import Flask, request, make_response
 
 app = Flask(__name__)
 
 #Dynamic URLS
 @app.route("/")
-def index():
-    return "<h1>Hello, World!</h1>"
+def index():   #custom response
+    response = make_response("Hello World\n")
+    response.status_code = 202
+    response.headers['content-type'] = 'text/plain'
+    return response
 
-@app.route("/hello")
+
+@app.route("/hello", methods=['GET','POST'])
 def hello():
-    return "hello world"
+    if request.method == 'GET':
+        return "You have made a GET request\n"
+    elif request.method == 'POST':
+        return "You have made a POST request\n"
+    else:
+        return "You will never see this message\n"
 
 #URL processors
 @app.route("/greet/<name>")
